@@ -1,0 +1,31 @@
+PODS:
+  - Flutter (1.0.0)
+  - flutter_vgs (0.0.1):
+    - Flutter
+    - VGSShowSDK
+  - VGSShowSDK (1.1.2):
+    - VGSShowSDK/Core (= 1.1.2)
+  - VGSShowSDK/Core (1.1.2)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - flutter_vgs (from `.symlinks/plugins/flutter_vgs/ios`)
+
+SPEC REPOS:
+  trunk:
+    - VGSShowSDK
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  flutter_vgs:
+    :path: ".symlinks/plugins/flutter_vgs/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  flutter_vgs: e12b0d4cb67ae91ff44d40723c14c6e5fbbc2e3b
+  VGSShowSDK: 23fd95eaa60c4d2866f4e65291d8a7a264cc25a4
+
+PODFILE CHECKSUM: fe0e1ee7f3d1f7d00b11b474b62dd62134535aea
+
+COCOAPODS: 1.10.2

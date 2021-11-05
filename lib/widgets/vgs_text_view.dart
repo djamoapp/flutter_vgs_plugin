@@ -43,6 +43,15 @@ class _VgsTextViewState extends State<VgsTextView> {
         creationParams: creationParams,
         creationParamsCodec: const StandardMessageCodec(),
       );
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return UiKitView(
+        viewType: 'com.djamo.flutter_vgs/textview',
+        layoutDirection: TextDirection.ltr,
+        onPlatformViewCreated: (int id) =>
+            _onPlatformViewCreated(id, creationParams),
+        creationParams: creationParams,
+        creationParamsCodec: const StandardMessageCodec(),
+      );
     }
     return Text('$defaultTargetPlatform is not yet supported by the plugin');
   }
