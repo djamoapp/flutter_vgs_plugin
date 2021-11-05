@@ -5,13 +5,13 @@
 Pod::Spec.new do |s|
   s.name             = 'flutter_vgs'
   s.version          = '0.0.1'
-  s.summary          = 'A new flutter plugin project.'
+  s.summary          = 'A flutter VGS show plugin.'
   s.description      = <<-DESC
-A new flutter plugin project.
+  A flutter VGS show plugin.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'http://djamo.io'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'Djamo' => 'josue.kouakou@djamo.io' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
