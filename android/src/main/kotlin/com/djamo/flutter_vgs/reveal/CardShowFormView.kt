@@ -23,6 +23,7 @@ internal class CardShowFormView(
     var vaultId = vgsParams!!.get("vaultId")!!.toString()
     var environment = vgsParams!!.get("environment")!!.toString()
     var path = vgsParams!!.get("path")!!.toString()
+    var fieldId = vgsParams!!.get("id")!!.toString()
 
     private val vgsShow: VGSShow =
             VGSShow.Builder(context, vaultId)
@@ -36,7 +37,7 @@ internal class CardShowFormView(
     protected val methodChannel =
             MethodChannel(
                     messenger,
-                    "com.djamo.flutter_vgs/textview_$id".also { Log.d("Test", it) }
+                    "com.djamo.flutter_vgs/textview_$fieldId".also { Log.d("Test", it) }
             )
 
     override fun getView(): View {
@@ -50,7 +51,8 @@ internal class CardShowFormView(
     init {
         var id = vgsParams!!.get("id")!!.toString()
         vgsTextView.setContentPath(id)
-        vgsTextView.setHint("Fetching $id...")
+        vgsTextView.setHint("...")
+        vgsTextView.addTransformationRegex("(\\d{4})(\\d{4})(\\d{4})(\\d{4})".toRegex(), "$1 $2 $3 $4")
         vgsShow.subscribe(vgsTextView)
         methodChannel.setMethodCallHandler(this)
     }
@@ -59,15 +61,23 @@ internal class CardShowFormView(
 
         when (call.method) {
             "revealVGSText" -> revealVGSText(call, result)
+            "copyVGSText" -> copyVGSText(call, result)
             "getPlatformVersion" -> result.success("Android ${android.os.Build.VERSION.RELEASE}")
         }
     }
-
+    private fun copyVGSText(call: MethodCall, result: MethodChannel.Result)  {
+        try {
+        vgsTextView.copyToClipboard(VGSTextView.CopyTextFormat.RAW)
+        result.success(true)
+        }
+        catch(e:Exception) {
+            throw e
+        }
+   }
     private fun revealVGSText(call: MethodCall, result: MethodChannel.Result) {
         var id: String? = call.argument<String>("id")
         var token: String? = call.argument<String>("token")
         var path: String? = call.argument<String>("path")
-        Log.d("Test", (call.arguments as Map<String, Any>).toString())
         if (path !== null) {
             vgsShow.requestAsync(
                     VGSRequest.Builder(path, VGSHttpMethod.POST)
