@@ -12,6 +12,12 @@ class VgsTextView extends StatefulWidget {
   final String path;
   final String environment;
 
+  static copyContent({required String id}) {
+    final MethodChannel _channel;
+    _channel = new MethodChannel('com.djamo.flutter_vgs/textview_$id');
+    _channel.invokeMethod('copyVGSText');
+  }
+
   const VgsTextView(
       {Key? key,
       /* this.onTextViewCreated, */ required this.id,
@@ -58,7 +64,8 @@ class _VgsTextViewState extends State<VgsTextView> {
 
   void _onPlatformViewCreated(int id, Map<String, dynamic> creationParams) {
     final MethodChannel _channel;
-    _channel = new MethodChannel('com.djamo.flutter_vgs/textview_$id');
+    _channel = new MethodChannel(
+        'com.djamo.flutter_vgs/textview_${creationParams["id"]}');
     _channel.invokeMethod('revealVGSText', creationParams);
     return;
   }

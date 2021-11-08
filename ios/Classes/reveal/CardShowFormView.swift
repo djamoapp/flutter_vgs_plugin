@@ -24,16 +24,20 @@ class CardShowFormView: NSObject, FlutterPlatformView {
         let argData = args as? Dictionary<String, Any>
     
         let env = argData?["environment"] as? String == "live" ? VGSEnvironment.live: VGSEnvironment.sandbox
+       
+        let fieldKey:String = (argData?["id"] as? String?)! ?? "pan"
         self.vgsShow =  VGSShow(id:argData?["vaultId"] as? String ?? "", environment: env)
+        print("com.djamo.flutter_vgs/textview_\(String(describing: fieldKey))")
         // Set channel
-        channel = FlutterMethodChannel(name: "com.djamo.flutter_vgs/textview_\(viewId)",binaryMessenger: messenger)
+        channel = FlutterMethodChannel(name: "com.djamo.flutter_vgs/textview_\(String(describing: fieldKey))",binaryMessenger: messenger)
         super.init()
        //Convert Dart Map object to Swift Array
         if let argData = args as? Dictionary<String, Any>,
            let fieldId = argData["id"] as? String{
             vgsTextView.contentPath = "\(String(describing: fieldId))"
-            vgsTextView.placeholder = "Fetching \(String(describing: fieldId))..."
-           
+            vgsTextView.placeholder = "..."
+            vgsTextView.translatesAutoresizingMaskIntoConstraints = false
+            vgsTextView.widthAnchor.constraint(equalToConstant: 250).isActive = true
             if(fieldId == "pan"){
                 do {
                             let cardNumberPattern = "(\\d{4})(\\d{4})(\\d{4})(\\d{4})"
@@ -47,20 +51,23 @@ class CardShowFormView: NSObject, FlutterPlatformView {
                         }
             }
             //Set UI
-            vgsTextView.translatesAutoresizingMaskIntoConstraints = false
             vgsTextView.font = UIFont.systemFont(ofSize: 14)
             vgsTextView.placeholderStyle.color = .black
-            vgsTextView.placeholderStyle.textAlignment = .center
-            vgsTextView.textAlignment = .center
+            vgsTextView.placeholderStyle.textAlignment = .left
+            vgsTextView.textAlignment = .left
             vgsTextView.borderWidth = (0)
             //VGS subscribe
+         
             vgsShow.subscribe(vgsTextView)
+         
         }
     //Method call
         channel.setMethodCallHandler({ (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
             switch call.method {
             case "revealVGSText":
                 self.revealVGSText(with: call, result: result)
+            case "copyVGSText":
+                self.copyVGSText(with: call, result: result)
             default:
                     result(FlutterMethodNotImplemented)
             }
@@ -71,6 +78,14 @@ class CardShowFormView: NSObject, FlutterPlatformView {
         return vgsTextView
     }
 
+    private func copyVGSText(with flutterMethodCall: FlutterMethodCall, result: @escaping FlutterResult)  {
+        do {
+         vgsTextView.copyTextToClipboard()
+            return result(true)
+            } catch {
+                return result(false)
+            }
+   }
     private func revealVGSText(with flutterMethodCall: FlutterMethodCall, result: @escaping FlutterResult)  {
         var errorInfo: [String : Any] = [:]
         var payload: [String : Any] = [:]
