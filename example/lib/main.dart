@@ -20,8 +20,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    const VAULT_ID = "<VAULT_ID>";
-    const DJAMO_VGS_PATH = "<VGS PATH>";
+    const VAULT_ID = "tntsgokx54b";
+    const DJAMO_VGS_PATH = "/post";
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -33,11 +33,21 @@ class _MyAppState extends State<MyApp> {
               width: 180,
               height: 20,
               child: VgsTextView(
-                id: "pan",
-                token: "",
+                key: Key("card_number"),
+                id: "card_number",
+                token: "tok_sandbox_uTsYqMdZbjd8xgeSAivQxg",
                 vaultId: VAULT_ID,
                 path: DJAMO_VGS_PATH,
               )),
+          SizedBox(
+              width: 180,
+              height: 50,
+              child: InkWell(
+                onTap: () {
+                  VgsTextView.copyContent(id: "card_number");
+                },
+                child: Icon(Icons.copy_all_outlined),
+              ))
         ])),
       ),
     );
