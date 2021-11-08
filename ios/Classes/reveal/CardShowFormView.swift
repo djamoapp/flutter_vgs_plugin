@@ -27,7 +27,6 @@ class CardShowFormView: NSObject, FlutterPlatformView {
        
         let fieldKey:String = (argData?["id"] as? String?)! ?? "pan"
         self.vgsShow =  VGSShow(id:argData?["vaultId"] as? String ?? "", environment: env)
-        print("com.djamo.flutter_vgs/textview_\(String(describing: fieldKey))")
         // Set channel
         channel = FlutterMethodChannel(name: "com.djamo.flutter_vgs/textview_\(String(describing: fieldKey))",binaryMessenger: messenger)
         super.init()
@@ -101,7 +100,6 @@ class CardShowFormView: NSObject, FlutterPlatformView {
                    result(errorInfo)
                    return
                }
-        print("vgsshow: \(String(describing: payload))")
         vgsShow.request(path:otherPath["path"] as! String,
                                                 method: .post, payload: payload) { (requestResult) in
 
@@ -109,10 +107,10 @@ class CardShowFormView: NSObject, FlutterPlatformView {
                     case .success(let code):
                         var successInfo: [String : Any] = [:]
                         successInfo["show_status_code"] = code
-                        print("vgsshow success, code: \(code)")
+                        //print("vgsshow success, code: \(code)")
                         result(successInfo)
                     case .failure(let code, let error):
-                        print("vgsshow failed, code: \(code), error: \(String(describing: error))")
+                       // print("vgsshow failed, code: \(code), error: \(String(describing: error))")
                         errorInfo["show_error_code"] = code
                         if let message = error?.localizedDescription {
                             errorInfo["show_error_message"] = message
