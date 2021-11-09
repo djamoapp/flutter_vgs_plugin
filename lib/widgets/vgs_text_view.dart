@@ -31,7 +31,24 @@ class VgsTextView extends StatefulWidget {
   _VgsTextViewState createState() => _VgsTextViewState();
 }
 
-class _VgsTextViewState extends State<VgsTextView> {
+class _VgsTextViewState extends State<VgsTextView>
+    with TickerProviderStateMixin {
+  late AnimationController controller;
+  late CurvedAnimation curve;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    );
+    curve = CurvedAnimation(
+      parent: controller,
+      curve: Curves.easeIn,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> creationParams = {
@@ -42,22 +59,26 @@ class _VgsTextViewState extends State<VgsTextView> {
       "environment": widget.environment
     };
     if (defaultTargetPlatform == TargetPlatform.android) {
-      return AndroidView(
-        viewType: 'com.djamo.flutter_vgs/textview',
-        onPlatformViewCreated: (int id) =>
-            _onPlatformViewCreated(id, creationParams),
-        creationParams: creationParams,
-        creationParamsCodec: const StandardMessageCodec(),
-      );
+      return FadeTransition(
+          opacity: curve,
+          child: AndroidView(
+            viewType: 'com.djamo.flutter_vgs/textview',
+            onPlatformViewCreated: (int id) =>
+                _onPlatformViewCreated(id, creationParams),
+            creationParams: creationParams,
+            creationParamsCodec: const StandardMessageCodec(),
+          ));
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return UiKitView(
-        viewType: 'com.djamo.flutter_vgs/textview',
-        layoutDirection: TextDirection.ltr,
-        onPlatformViewCreated: (int id) =>
-            _onPlatformViewCreated(id, creationParams),
-        creationParams: creationParams,
-        creationParamsCodec: const StandardMessageCodec(),
-      );
+      return FadeTransition(
+          opacity: curve,
+          child: UiKitView(
+            viewType: 'com.djamo.flutter_vgs/textview',
+            layoutDirection: TextDirection.ltr,
+            onPlatformViewCreated: (int id) =>
+                _onPlatformViewCreated(id, creationParams),
+            creationParams: creationParams,
+            creationParamsCodec: const StandardMessageCodec(),
+          ));
     }
     return Text('$defaultTargetPlatform is not yet supported by the plugin');
   }
