@@ -32,7 +32,7 @@ internal class CardShowFormView(
                             else VGSEnvironment.Sandbox()
                     )
                     .build()
-    private val vgsTextView: VGSTextView = VGSTextView(context)
+    private val vgsTextView: VGSTextView 
 
     protected val methodChannel =
             MethodChannel(
@@ -50,8 +50,10 @@ internal class CardShowFormView(
 
     init {
         var id = vgsParams!!.get("id")!!.toString()
+        vgsTextView = VGSTextView(context)
         vgsTextView.setContentPath(id)
         vgsTextView.setHint("...")
+        //vgsTextView.setHintTextColor(Color.rgb(255, 255, 255))
         vgsTextView.addTransformationRegex("(\\d{4})(\\d{4})(\\d{4})(\\d{4})".toRegex(), "$1 $2 $3 $4")
         vgsShow.subscribe(vgsTextView)
         methodChannel.setMethodCallHandler(this)
